@@ -1314,6 +1314,75 @@ document.getElementById('doConvert').addEventListener('click', function () {
 
 
 
+
+
+
+
+
+
+
+
+
+
   </script>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+<script>
+// ✅ تحسين زر الرجوع في الهاتف ليعمل بشكل طبيعي داخل الموقع فقط
+window.addEventListener("load", () => {
+  // إنشاء حالة أولية حتى لا يخرج الموقع عند أول ضغطة
+  history.pushState({ page: "home" }, "", "#home");
+});
+
+window.addEventListener("popstate", () => {
+  const sidebar = document.getElementById("sidebar");
+  const overlay = document.getElementById("overlay");
+  const pages = document.querySelectorAll(".page");
+  const current = Array.from(pages).find(p => p.style.display === "block");
+
+  // إذا القائمة الجانبية مفتوحة → نغلقها فقط
+  if (sidebar && sidebar.classList.contains("open")) {
+    sidebar.classList.remove("open");
+    if (overlay) overlay.classList.remove("show");
+    history.pushState({ page: "home" }, "", "#home");
+    return;
+  }
+
+  // إذا داخل صفحة فرعية → نرجع للرئيسية
+  if (current && current.id !== "home") {
+    showPage("home");
+    history.pushState({ page: "home" }, "", "#home");
+    return;
+  }
+
+  // إذا هو في الرئيسية → نخرج فعلاً من الموقع
+  history.back();
+});
+</script>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
 </body>
 </html>
