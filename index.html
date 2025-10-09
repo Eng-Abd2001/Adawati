@@ -1,0 +1,1283 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>أدواتي اليومية — الإصدار النهائي</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --blue:#2196f3;
+      --accent:#1e88e5; /* أزرق مريح */
+      --bg:#f7fbff;
+      --card-shadow:0 8px 26px rgba(30,100,200,0.08);
+      --text:#1f2937;
+      --muted:#6b7280;
+      --result-bg:#f0f8ff;
+      --footer-color:#6b7280;
+      --back-color: #1e88e5;
+      --pulse-color: rgba(30,136,229,0.12);
+    }
+    [data-theme="dark"]{
+      --bg:#1a2533; /* رمادي مائل للأزرق مريح */
+      --accent:#62a0e8;
+      --card-shadow:0 10px 34px rgba(0,0,0,0.45);
+      --text:#e6eef8;
+      --muted:#9fb0c9;
+      --result-bg:#12202b;
+      --footer-color:#9fb0c9;
+      --back-color: #2b7bd6;
+      --pulse-color: rgba(98,160,232,0.12);
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);direction:rtl;transition:background .35s ease,color .35s ease}
+    a{color:inherit;text-decoration:none}
+
+    /* header */
+    .header{display:flex;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid rgba(0,0,0,0.06);position:sticky;top:0;background:linear-gradient(180deg,rgba(255,255,255,0.6),transparent);backdrop-filter:blur(4px);z-index:40}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{width:46px;height:46px;border-radius:10px;background:linear-gradient(135deg,var(--blue),var(--accent));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:20px}
+    .site-title{font-size:18px;font-weight:700;color:var(--accent)}
+    .controls{margin-left:auto;display:flex;gap:10px;align-items:center}
+
+    /* theme toggle (knob moves inside box only) */
+    .theme-toggle{width:66px;height:36px;border-radius:999px;background:linear-gradient(90deg,rgba(255,255,255,0.9),rgba(0,0,0,0.02));display:flex;align-items:center;padding:4px;cursor:pointer;border:1px solid rgba(0,0,0,0.06);position:relative;box-shadow:0 6px 18px rgba(16,24,40,0.06)}
+    .theme-toggle .track{position:relative;flex:1;height:28px;border-radius:999px;display:flex;align-items:center;padding:2px}
+    .theme-toggle .knob{width:28px;height:28px;border-radius:50%;background:linear-gradient(180deg,#fff,#f0f0f0);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(16,24,40,0.12);transition:transform .36s cubic-bezier(.2,.9,.3,1),background .25s,filter .2s;transform:translateX(0);will-change:transform}
+    .theme-toggle[data-theme="dark"] .knob{transform:translateX(30px);background:linear-gradient(180deg,#0e2230,#12343f);color:#e6eef8}
+    .theme-toggle .knob.spin{transition:transform .36s cubic-bezier(.2,.9,.3,1) .02s, transform 0.36s; transform-origin:center; }
+    .theme-toggle .knob:active{filter:brightness(.95)}
+    .theme-toggle .knob .ico{display:block;font-size:14px;line-height:1}
+
+    /* pulse effect */
+    .btn, .small-btn, .back-btn, .theme-toggle{position:relative;overflow:visible}
+    .pulse{
+      position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) scale(0);width:120%;height:120%;border-radius:50%;background:var(--pulse-color);opacity:0;pointer-events:none;transition:transform .42s ease,opacity .42s ease;
+    }
+    .pulse.show{transform:translate(-50%,-50%) scale(1);opacity:1;transition:transform .42s ease,opacity .42s ease}
+    /* layout */
+    .container{padding:20px;max-width:1100px;margin:18px auto}
+    .intro{display:flex;flex-direction:column;align-items:center;margin-bottom:18px;text-align:center}
+    .intro h1{font-size:22px;color:var(--accent);margin-bottom:6px}
+    .intro p{color:var(--muted);font-size:14px;margin-bottom:6px}
+
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+
+    .card{background:linear-gradient(180deg,rgba(255,255,255,0.95),rgba(255,255,255,0.8));border-radius:12px;padding:14px;box-shadow:var(--card-shadow);border:1px solid rgba(0,0,0,0.04);display:flex;flex-direction:row;gap:12px;align-items:center;transition:transform .12s ease,box-shadow .12s ease;cursor:pointer;position:relative}
+    [data-theme="dark"] .card{background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(0,0,0,0.03));border:1px solid rgba(255,255,255,0.04)}
+    .card:hover{transform:translateY(-6px)}
+    .card .icon{width:56px;height:56px;border-radius:10px;background:linear-gradient(180deg,#f3fbff,#ffffff);display:flex;align-items:center;justify-content:center;font-size:22px;color:var(--blue)}
+    .card .meta{flex:1;text-align:right}
+    .card h3{margin:0;font-size:15px;color:var(--accent)}
+    .card p{margin:0;color:var(--muted);font-size:13px}
+
+    .fav{position:absolute;left:10px;top:10px;cursor:pointer;font-size:18px;padding:6px}
+    .fav.on{color:gold}
+
+    .btn{display:inline-block;padding:10px 14px;border-radius:10px;background:var(--accent);color:#fff;border:none;cursor:pointer;font-weight:600;transition:transform .12s ease,box-shadow .12s ease}
+    .small-btn{background:transparent;border:1px solid rgba(0,0,0,0.06);padding:8px;border-radius:8px;cursor:pointer}
+
+    .back-btn{background:var(--back-color);color:#fff;border:none;padding:8px 12px;border-radius:10px;font-weight:800;font-size:15px;cursor:pointer;box-shadow:0 6px 16px rgba(30,136,229,0.12)}
+    .back-btn .pulse{width:200%;height:200%}
+
+    .overlay{position:fixed;inset:0;background:rgba(0,0,0,0.32);opacity:0;pointer-events:none;transition:opacity .24s ease}
+    .overlay.show{opacity:1;pointer-events:auto}
+
+    .sidebar{position:fixed;top:0;left:0;height:100%;width:300px;background:var(--accent);color:#fff;padding:20px;transform:translateX(-110%);transition:transform .28s cubic-bezier(.2,.9,.3,1);box-shadow:8px 0 30px rgba(0,0,0,0.25);z-index:60}
+    .sidebar.open{transform:translateX(0)}
+    .nav{margin-top:10px;display:flex;flex-direction:column;gap:8px}
+    .nav a{padding:12px;border-radius:8px;color:#e8f3ff;font-weight:600}
+
+    .page{margin-top:18px}
+    .page-title{font-size:18px;margin-bottom:12px;color:var(--accent);display:flex;align-items:center;justify-content:space-between;gap:10px}
+    .tool{background:linear-gradient(180deg,rgba(255,255,255,0.95),rgba(255,255,255,0.8));padding:14px;border-radius:12px;border:1px solid rgba(13,71,161,0.06);margin-bottom:14px}
+    [data-theme="dark"] .tool{background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(0,0,0,0.03));border:1px solid rgba(255,255,255,0.04)}
+    .field{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .field label{min-width:fit-content}
+    .field input, .field select, .field textarea{padding:10px;border-radius:8px;border:1px solid rgba(13,71,161,0.06);min-width:160px}
+    .result{margin-top:12px;padding:12px;border-radius:8px;background:var(--result-bg);border:1px dashed rgba(13,71,161,0.06);color:var(--accent);white-space:pre-line}
+    .date-box{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:220px}
+    .date-box .g-date{font-size:24px;font-weight:700;color:var(--accent)}
+    .date-box .h-date{font-size:18px;color:var(--text);margin-top:8px}
+
+    .percent-fields{display:flex;flex-direction:column;gap:12px;align-items:flex-end;width:100%;text-align:right}
+    .percent-fields .field{display:flex;flex-direction:column;align-items:flex-end;text-align:right;width:100%}
+    .percent-fields label{margin-bottom:6px;align-self:flex-end;width:100%;max-width:420px;box-sizing:border-box;padding-right:4px}
+    .percent-fields input{text-align:right;align-self:flex-end;width:100%;max-width:420px;box-sizing:border-box}
+    .percent-actions{width:100%;display:flex;justify-content:flex-end;gap:8px;align-items:center}
+
+    /* convert page - vertical clean layout */
+    .conv-vertical{display:flex;flex-direction:column;gap:10px}
+    .conv-vertical .field{flex-direction:column;align-items:flex-end}
+    .conv-row{display:flex;gap:8px;align-items:center}
+
+    /* calculator grid */
+    .calc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px}
+    .calc-grid button{padding:14px;border-radius:8px;border:0;background:linear-gradient(180deg,var(--accent),#0f7ad1);color:#fff;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(30,136,229,0.12)}
+    .calc-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:8px}
+
+    /* timer layout */
+    .timer-center{display:flex;flex-direction:column;align-items:center;gap:12px}
+    .timer-display{font-size:36px;font-weight:800;background:var(--result-bg);padding:16px 22px;border-radius:12px;border:1px dashed rgba(13,71,161,0.06);min-width:150px;text-align:center}
+    .timer-controls{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+
+    footer{margin-top:18px;text-align:center;color:var(--footer-color);padding:18px;font-size:14px}
+    @media (max-width:700px){
+      .container{padding:12px;margin:12px}
+      .sidebar{width:86%}
+      .calc-grid button{padding:12px}
+      .theme-toggle{width:58px;height:32px}
+    }
+    
+    /* جعل النص فوق مربع الإدخال مع بقاء كل شيء بمحاذاة اليمين */
+#age .field,
+#diff .field {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-end !important;
+  text-align: right !important;
+  gap: 6px !important;
+}
+
+#age .field label,
+#diff .field label {
+  align-self: flex-end !important;
+  text-align: right !important;
+  margin-bottom: 4px !important;
+  width: 100%;
+}
+
+#age .field input,
+#diff .field input {
+  width: 100% !important;
+  max-width: 380px;
+  box-sizing: border-box;
+  text-align: right !important;
+  direction: rtl !important;
+}
+
+/* إزالة زر الحفظ من صفحة عداد الكلمات والحروف */
+#counter #saveText {
+  display: none !important;
+}
+
+/* جعل زر المشاركة مثل باقي الصفحات */
+#counter #shareText {
+  background: transparent !important;
+  border: 1px solid rgba(0,0,0,0.06) !important;
+  color: var(--text) !important;
+  padding: 8px !important;
+  border-radius: 8px !important;
+  cursor: pointer !important;
+  font-weight: 500 !important;
+}
+[data-theme="dark"] #counter #shareText {
+  border-color: rgba(255,255,255,0.08) !important;
+  color: var(--text) !important;
+}
+
+
+
+
+
+/* إخفاء زر المشاركة من جميع الصفحات */
+button[id^="share"],
+#shareAge,
+#shareDiff,
+#shareBmi,
+#shareDisc,
+#sharePercent,
+#shareConvert,
+#shareText,
+#shareCalc,
+#shareTimer {
+  display: none !important;
+}
+    
+    
+    
+    
+    /* --- إصلاح المحاذاة العامة لجميع الصفحات والأدوات --- */
+.page {
+  direction: rtl;
+  text-align: right;
+}
+
+.page .tool {
+  text-align: right;
+}
+
+.page .field {
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+  text-align: right;
+}
+
+.page .field label {
+  text-align: right;
+}
+
+.page input,
+.page select,
+.page textarea {
+  text-align: right;
+}
+
+.page .result {
+  text-align: right;
+}
+
+.page .back-wrap {
+  text-align: right;
+}
+
+.page .tool div[style*="display:flex"] {
+  justify-content: flex-end !important;
+}
+
+
+/* --- جعل أزرار احسب ومشاركة بمحاذاة اليمين --- */
+.page .tool div[style*="display:flex"][style*="gap"] {
+  justify-content: flex-end !important;
+  flex-direction: row-reverse !important;
+}
+
+
+/* إخفاء زر الوضع الليلي نهائيًا */
+#themeToggle {
+  display: none !important;
+}
+
+
+
+
+/* نقل زر الثلاث شخطات (☰) إلى اليسار فقط دون التأثير على باقي الصفحة */
+#openSidebar {
+  position: absolute !important;
+  left: 12px !important;
+  right: auto !important;
+}
+
+
+
+
+/* 💎 تنسيق احترافي لنتيجة تحويل الوحدات */
+#convert .result {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: var(--result-bg, #f9fafb);
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 10px;
+  padding: 12px 14px;
+  text-align: right;
+  direction: rtl;
+  font-weight: 500;
+  line-height: 1.8;
+}
+
+#convert .result .unit-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(0,0,0,0.02);
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(0,0,0,0.04);
+  font-size: 16px;
+}
+
+#convert .result .unit-val {
+  flex: 1;
+}
+
+#convert .result .unit-equal {
+  font-weight: bold;
+  color: var(--accent, #2563eb);
+  margin: 0 8px;
+}
+
+[data-theme="dark"] #convert .result .unit-row {
+  background: rgba(255,255,255,0.05);
+  border-color: rgba(255,255,255,0.08);
+}
+
+
+
+
+
+
+
+
+/* تنسيق احترافي لنتيجة تحويل الوحدات */
+#convert .result {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: var(--result-bg, #f9fafb);
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 10px;
+  padding: 12px 14px;
+  text-align: right;
+  direction: rtl;
+  font-weight: 500;
+  line-height: 1.6;
+}
+
+#convert .result .unit-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: rgba(0,0,0,0.02);
+  border: 1px solid rgba(0,0,0,0.04);
+  font-size: 15px;
+}
+
+#convert .result .unit-val {
+  flex: 1;
+  text-align: right;
+}
+
+#convert .result .unit-equal {
+  margin: 0 10px;
+  font-weight: 700;
+  color: var(--accent, #2563eb);
+}
+[data-theme="dark"] #convert .result .unit-row {
+  background: rgba(255,255,255,0.03);
+  border-color: rgba(255,255,255,0.06);
+}
+
+
+
+
+
+
+
+/* إصلاح المسافة الكبيرة في ناتج تحويل الوحدات — يجعل الصف ضيقاً ومتمركزاً */
+#convert .result {
+  display: flex !important;
+  justify-content: center !important;
+  
+   
+    
+     
+       /* يضع صف النتيجة في منتصف الصندوق */
+  padding: 12px 14px !important;
+}
+
+
+
+/* اجعل صف الوحدة يبسُط عرضه لمحتواه ولا يمتد بعرض الحاوية */
+#convert .result .unit-row {
+  display: inline-flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 12px !important;
+  width: auto !important;
+  max-width: 100% !important;
+}
+
+
+
+/* منع العناصر من التمدد وابقائها مضغوطة بجانب بعضها */
+#convert .result .unit-val {
+  flex: 0 0 auto !important;
+  text-align: center !important;
+  white-space: nowrap !important;
+  padding: 4px 8px !important;
+}
+
+
+
+/* مسافة معتدلة لعلامة = */
+#convert .result .unit-equal {
+  margin: 0 6px !important;
+  font-weight: 700 !important;
+  color: var(--accent) !important;
+}
+
+
+
+
+
+
+
+/* إزالة أي تأثير pulse داخل صفحة الحاسبة */
+#calc .pulse,
+#calc button .pulse {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+
+
+/* منع أي تحول/ظلال عند الضغط على أزرار الحاسبة */
+#calc .calc-grid button,
+#calc .calc-actions button,
+#calc button {
+  transition: none !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+
+
+/* إزالة أي تأثير عند :active أو :focus */
+#calc .calc-grid button:active,
+#calc .calc-grid button:focus,
+#calc button:active,
+#calc button:focus {
+  transform: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+
+
+
+
+
+
+
+
+
+  </style>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</head>
+
+
+
+
+
+
+<body>
+  <header class="header">
+    <div class="brand">
+      <div class="logo">أ</div>
+      <div>
+        <div class="site-title">أدواتي اليومية</div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <!-- Theme toggle (right side) -->
+      <div id="themeToggle" class="theme-toggle" aria-pressed="false" role="button" data-theme="light" title="تبديل الوضع">
+        <div class="track">
+          <div class="knob" id="themeKnob" aria-hidden="true"><span class="ico">🌙</span></div>
+        </div>
+      </div>
+
+      <button id="openSidebar" class="small-btn" title="القائمة">☰
+        <span class="pulse" aria-hidden="true"></span>
+      </button>
+    </div>
+  </header>
+
+
+
+
+
+
+  <div class="overlay" id="overlay"></div>
+
+  <aside class="sidebar" id="sidebar" aria-hidden="true">
+    <div style="display:flex;justify-content:flex-start;margin-bottom:8px">
+      <button id="closeSidebar" class="small-btn" style="background:transparent;border:0;padding:6px;color:#fff">✖</button>
+    </div>
+    <nav class="nav">
+      <a href="#home">الصفحة الرئيسية</a>
+      <a href="#age">حاسبة العمر</a>
+      <a href="#diff">الفرق بين تاريخين</a>
+      <a href="#bmi">الوزن المثالي</a>
+      <a href="#discount">حاسبة الخصم</a>
+      <a href="#percent">النسبة المئوية</a>
+      <a href="#date">التاريخ اليوم</a>
+      <a href="#convert">تحويل الوحدات</a>
+      <a href="#counter">عداد الكلمات والحروف</a>
+      <a href="#calc">آلة حاسبة</a>
+      <a href="#timer">مؤقت / ستوب ووتش</a>
+    </nav>
+  </aside>
+
+  <main class="container">
+    <section id="home" class="page">
+      <div class="intro">
+        <h1>مرحبًا في أدواتي اليومية</h1>
+        <p>مجموعة أدوات بسيطة وسريعة تساعدك في الحسابات اليومية</p>
+      </div>
+
+
+
+
+
+
+      <div class="grid" id="cardsGrid">
+        <div class="card" data-tool="age"><div class="icon">🧮</div><div class="meta"><h3>حاسبة العمر</h3><p>احسب عمرك بالأيام، الأشهر، والسنوات</p></div><div class="fav" data-tool="age" title="أضف للمفضلة">☆</div></div>
+
+
+
+        <div class="card" data-tool="diff"><div class="icon">⏳</div><div class="meta"><h3>الفرق بين تاريخين</h3><p>أيام، أسابيع، أشهر وسنوات</p></div><div class="fav" data-tool="diff" title="أضف للمفضلة">☆</div></div>
+
+
+
+        <div class="card" data-tool="bmi"><div class="icon">⚖️</div><div class="meta"><h3>الوزن المثالي</h3><p>حساب مؤشر كتلة الجسم والوزن المثالي بسهولة</p></div><div class="fav" data-tool="bmi" title="أضف للمفضلة">☆</div></div>
+
+
+
+        <div class="card" data-tool="discount"><div class="icon">💸</div><div class="meta"><h3>حاسبة الخصم</h3><p>احسب السعر بعد الخصم بسهولة</p></div><div class="fav" data-tool="discount" title="أضف للمفضلة">☆</div></div>
+
+
+
+        <div class="card" data-tool="percent"><div class="icon">📈</div><div class="meta"><h3>النسبة المئوية</h3><p>احسب نسبة أو خصم من رقم</p></div><div class="fav" data-tool="percent" title="أضف للمفضلة">☆</div></div>
+
+
+
+        <div class="card" data-tool="date"><div class="icon">📆</div><div class="meta"><h3>التاريخ اليوم</h3><p>هجري وميلادي</p></div><div class="fav" data-tool="date" title="أضف للمفضلة">☆</div></div>
+
+
+
+        <div class="card" data-tool="convert"><div class="icon">🔁</div><div class="meta"><h3>تحويل الوحدات</h3><p>طول، وزن، درجة حرارة</p></div><div class="fav" data-tool="convert" title="أضف للمفضلة">☆</div></div>
+
+
+        <div class="card" data-tool="counter"><div class="icon">✍️</div><div class="meta"><h3>عداد الكلمات والحروف</h3><p>عدّاد فوري للنصوص</p></div><div class="fav" data-tool="counter" title="أضف للمفضلة">☆</div></div>
+
+
+        <div class="card" data-tool="calc"><div class="icon">🧮</div><div class="meta"><h3>آلة حاسبة</h3><p>العمليات الأساسية: + − × ÷</p></div><div class="fav" data-tool="calc" title="أضف للمفضلة">☆</div></div>
+
+
+        <div class="card" data-tool="timer"><div class="icon">⏱️</div><div class="meta"><h3>مؤقت / ستوب ووتش</h3><p>ابدأ، أوقف، إعادة</p></div><div class="fav" data-tool="timer" title="أضف للمفضلة">☆</div></div>
+      </div>
+
+
+      <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:center">
+        <button class="btn" onclick="restoreDefaults()">إعادة ضبط المفضلات</button>
+      </div>
+    </section>
+
+    <!-- Tools -->
+
+
+
+
+
+    <section id="age" class="page" style="display:none">
+      <div class="page-title"><span>حاسبة العمر</span></div>
+      <div class="back-wrap"><button class="back-btn" onclick="showPage('home')">🔙</button></div>
+      <div class="tool">
+        <div class="field"><label>تاريخ ميلادك:</label><input type="date" id="birthDate"></div>
+        <div style="margin-top:12px;display:flex;gap:8px;justify-content:flex-end">
+          <button class="btn" onclick="calculateAge()">احسب</button>
+          <button class="small-btn" id="shareAge">مشاركة</button>
+        </div>
+        <div class="result" id="ageResult" style="display:none"></div>
+      </div>
+    </section>
+
+
+
+
+
+    <section id="diff" class="page" style="display:none">
+      <div class="page-title"><span>الفرق بين تاريخين</span></div>
+      <div class="back-wrap"><button class="back-btn" onclick="showPage('home')">🔙</button></div>
+      <div class="tool">
+        <div class="conv-vertical">
+          <div class="field"><label>التاريخ الأول:</label><input type="date" id="fromDate"></div>
+          <div class="field"><label>التاريخ الثاني:</label><input type="date" id="toDate"></div>
+        </div>
+        <div style="margin-top:12px;display:flex;gap:8px;justify-content:flex-end">
+          <button class="btn" id="calcDiffBtn">احسب</button>
+          <button class="small-btn" id="shareDiff">مشاركة</button>
+        </div>
+        <div class="result" id="diffResult" style="display:none"></div>
+      </div>
+    </section>
+
+
+
+
+
+    <section id="bmi" class="page" style="display:none">
+      <div class="page-title"><span>الوزن المثالي</span></div>
+      <div class="back-wrap"><button class="back-btn" onclick="showPage('home')">🔙</button></div>
+      <div class="tool">
+        <div class="conv-vertical">
+          <div class="field"><label>الوزن (كغ):</label><input type="number" id="weight" placeholder="الوزن"></div>
+          <div class="field"><label>الطول (سم):</label><input type="number" id="height" placeholder="الطول"></div>
+        </div>
+        <div style="margin-top:12px;display:flex;gap:8px;justify-content:flex-end">
+          <button class="btn" id="calcBmiBtn">احسب</button>
+          <button class="small-btn" id="shareBmi">مشاركة</button>
+        </div>
+        <div class="result" id="bmiResult" style="display:none"></div>
+      </div>
+    </section>
+
+
+
+
+
+    <section id="discount" class="page" style="display:none">
+      <div class="page-title"><span>حاسبة الخصم</span></div>
+      <div class="back-wrap"><button class="back-btn" onclick="showPage('home')">🔙</button></div>
+      <div class="tool">
+        <div class="conv-vertical">
+          <div class="field"><label>السعر الأصلي:</label><input type="number" id="origPrice"></div>
+          <div class="field"><label>نسبة الخصم (%):</label><input type="number" id="discRate" value="10"></div>
+        </div>
+        <div style="margin-top:12px;display:flex;gap:8px;justify-content:flex-end">
+          <button class="btn" id="calcDiscBtn">احسب</button>
+          <button class="small-btn" id="shareDisc">مشاركة</button>
+        </div>
+        <div class="result" id="discResult" style="display:none"></div>
+      </div>
+    </section>
+
+
+
+
+
+    <section id="percent" class="page" style="display:none">
+      <div class="page-title"><span>النسبة المئوية</span></div>
+      <div class="back-wrap"><button class="back-btn" onclick="showPage('home')">🔙</button></div>
+      <div class="tool">
+        <div class="field"><label>نوع الحساب:</label>
+          <select id="percentMode">
+            <option value="percent">حساب نسبة (مثال: 20% من 150)</option>
+            <option value="discount">حساب خصم (السعر بعد الخصم)</option>
+          </select>
+        </div>
+        <div id="percentInputs" class="percent-fields" style="margin-top:12px">
+          <div class="field"><label id="labelB">النسبة (%):</label><input type="number" id="percentRate" placeholder="أدخل النسبة"></div>
+          <div class="field"><label id="labelA">العدد:</label><input type="number" id="percentNum" placeholder="أدخل العدد أو السعر"></div>
+        </div>
+        <div style="margin-top:12px;display:flex;gap:8px;justify-content:flex-end" class="percent-actions">
+          <button class="btn" id="calcPercentBtn">احسب</button>
+          <button class="small-btn" id="sharePercent">مشاركة</button>
+        </div>
+        <div class="result" id="percentResult" style="display:none"></div>
+      </div>
+    </section>
+
+
+
+
+
+    <section id="date" class="page" style="display:none">
+      <div class="page-title"><span>التاريخ اليوم</span></div>
+      <div class="back-wrap"><button class="back-btn" onclick="showPage('home')">🔙</button></div>
+      <div class="tool date-box">
+        <div class="g-date" id="gDate">--</div>
+        <div class="h-date" id="hDate">--</div>
+      </div>
+    </section>
+
+
+
+
+
+    <section id="convert" class="page" style="display:none">
+      <div class="page-title"><span>تحويل الوحدات</span></div>
+      <div class="back-wrap"><button class="back-btn" onclick="showPage('home')">🔙</button></div>
+      <div class="tool">
+        <div class="conv-vertical">
+          <div class="field"><label>نوع التحويل:</label><select id="convType">
+            <option value="length">الطول</option>
+            <option value="weight">الوزن</option>
+            <option value="temp">درجة الحرارة</option>
+          </select></div>
+
+          <div class="field"><label>القيمة:</label><input type="number" id="convValue" placeholder="أدخل قيمة"></div>
+
+          <div class="field conv-row"><label>من:</label><select id="convFrom"></select></div>
+          <div class="field conv-row"><label>إلى:</label><select id="convTo"></select></div>
+        </div>
+
+        <div style="margin-top:12px;display:flex;gap:8px;justify-content:flex-end">
+          <button class="btn" id="doConvert">احسب</button>
+          <button class="small-btn" id="shareConvert">مشاركة</button>
+        </div>
+
+        <div class="result" id="convResult" style="display:none"></div>
+      </div>
+    </section>
+
+
+
+
+
+    <section id="counter" class="page" style="display:none">
+      <div class="page-title"><span>عداد الكلمات والحروف</span></div>
+      <div class="back-wrap"><button class="back-btn" onclick="showPage('home')">🔙</button></div>
+      <div class="tool">
+        <textarea id="textInput" rows="6" style="width:100%;padding:10px;border-radius:8px;border:1px solid rgba(13,71,161,0.06)" placeholder="اكتب أو ألصق نص هنا..."></textarea>
+        <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:flex-end">
+          <div id="counts" style="color:var(--muted)">كلمات: 0 — حروف: 0</div>
+          <button class="btn" id="shareText">مشاركة</button>
+          <button class="small-btn" id="saveText">حفظ</button>
+        </div>
+      </div>
+    </section>
+
+
+
+
+
+    <section id="calc" class="page" style="display:none">
+      <div class="page-title"><span>آلة حاسبة بسيطة</span></div>
+      <div class="back-wrap"><button class="back-btn" onclick="showPage('home')">🔙</button></div>
+      <div class="tool">
+      
+      
+      
+        <input type="text" id="calcDisplay" readonly style="width:100%;padding:10px;border-radius:8px;border:1px solid rgba(13,71,161,0.06);font-size:18px;text-align:right;direction:ltr">
+        
+        
+        
+        
+        
+        
+        
+        
+        <div class="calc-grid">
+  <button onclick="press('/')">÷</button>
+  <button onclick="press('%')">%</button>
+  <button onclick="backspaceCalc()">⌫</button>
+  <button onclick="clearAllCalc()">AC</button>
+
+  <button onclick="press('9')">9</button>
+  <button onclick="press('8')">8</button>
+  <button onclick="press('7')">7</button>
+  <button onclick="press('*')">×</button>
+
+  <button onclick="press('6')">6</button>
+  <button onclick="press('5')">5</button>
+  <button onclick="press('4')">4</button>
+  <button onclick="press('-')">−</button>
+
+  <button onclick="press('3')">3</button>
+  <button onclick="press('2')">2</button>
+  <button onclick="press('1')">1</button>
+  <button onclick="press('+')">+</button>
+
+  <button onclick="press('00')">00</button>
+  <button onclick="press('0')">0</button>
+  <button onclick="press('.')">,</button>
+  <button onclick="calculate()">=</button>
+</div>
+
+
+
+
+
+
+        <div class="calc-actions">
+  <button class="small-btn" id="shareCalc">مشاركة</button>
+</div>
+
+     </section>
+
+
+
+
+    <section id="timer" class="page" style="display:none">
+      <div class="page-title"><span>مؤقت / ستوب ووتش</span></div>
+      <div class="back-wrap"><button class="back-btn" onclick="showPage('home')">🔙</button></div>
+      <div class="tool">
+        <div class="timer-center">
+          <div style="display:flex;gap:8px;align-items:center">
+            <label>الإعداد (ثواني):</label>
+            <input type="number" id="timerInput" value="60" style="width:120px;padding:8px;border-radius:6px;border:1px solid rgba(13,71,161,0.06)">
+          </div>
+
+          <div class="timer-display" id="timerDisplay">00:00</div>
+
+          <div class="timer-controls">
+            <button class="btn" id="startTimer">ابدأ</button>
+            <button class="small-btn" id="stopTimer">أوقف</button>
+            <button class="small-btn" id="resetTimer">إعادة</button>
+            <button class="small-btn" id="shareTimer">مشاركة</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>تم التصميم بواسطة [ Eng_Abd ]</footer>
+  </main>
+
+  <script>
+  
+  
+  
+
+    // ---------- Basic navigation & state ----------
+    const pages = document.querySelectorAll('.page');
+    function showPage(id){
+      pages.forEach(p=> p.style.display = (p.id===id)?'block':'none');
+      window.scrollTo({top:0,behavior:'smooth'});
+      try{ localStorage.setItem('lastPage', id); }catch(e){}
+    }
+    function loadLastPage(){ try{ return localStorage.getItem('lastPage') || 'home'; }catch(e){ return 'home'; } }
+
+
+
+
+    // sidebar
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+    document.getElementById('openSidebar').addEventListener('click', ()=>{ sidebar.classList.add('open'); overlay.classList.add('show'); sidebar.setAttribute('aria-hidden','false'); });
+    document.getElementById('closeSidebar').addEventListener('click', closeSidebar);
+    overlay.addEventListener('click', closeSidebar);
+    function closeSidebar(){ sidebar.classList.remove('open'); overlay.classList.remove('show'); sidebar.setAttribute('aria-hidden','true'); }
+
+    document.querySelectorAll('.nav a').forEach(a=>{
+      a.addEventListener('click',(e)=>{
+        e.preventDefault();
+        const href = a.getAttribute('href').replace('#','');
+        showPage(href);
+        closeSidebar();
+      });
+    });
+    document.querySelectorAll('.card').forEach(card=>{
+      card.addEventListener('click', ()=> { const tool = card.getAttribute('data-tool'); if(tool) showPage(tool); });
+    });
+
+
+
+
+    // favorites simple
+    const favEls = document.querySelectorAll('.fav');
+    function loadFavorites(){ try{ const f = JSON.parse(localStorage.getItem('favorites')||'[]'); return Array.isArray(f)?f:[] }catch(e){ return []; } }
+    function saveFavorites(arr){ try{ localStorage.setItem('favorites', JSON.stringify(arr)); }catch(e){} }
+    function renderFavorites(){
+      const favs = loadFavorites();
+      favEls.forEach(el=>{
+        const tool = el.getAttribute('data-tool');
+        if(favs.includes(tool)){ el.textContent='★'; el.classList.add('on'); } else { el.textContent='☆'; el.classList.remove('on'); }
+      });
+      const grid = document.getElementById('cardsGrid');
+      const cards = Array.from(grid.querySelectorAll('.card'));
+      cards.sort((a,b)=> (loadFavorites().includes(a.dataset.tool)?0:1) - (loadFavorites().includes(b.dataset.tool)?0:1));
+      cards.forEach(c=>grid.appendChild(c));
+    }
+    favEls.forEach(el=>{
+      el.addEventListener('click',(e)=>{ e.stopPropagation(); const tool = el.getAttribute('data-tool'); const favs = loadFavorites(); if(favs.includes(tool)){ favs.splice(favs.indexOf(tool),1); } else { favs.push(tool); } saveFavorites(favs); renderFavorites(); });
+    });
+
+
+
+
+    // ---------- Theme toggle (knob inside box only) ----------
+    const themeToggle = document.getElementById('themeToggle');
+    const themeKnob = document.getElementById('themeKnob');
+    function loadTheme(){ try{ return localStorage.getItem('theme')||'light' }catch(e){ return 'light'; } }
+    function applyTheme(t){
+      if(t==='dark'){ document.documentElement.setAttribute('data-theme','dark'); themeToggle.setAttribute('data-theme','dark'); themeToggle.setAttribute('aria-pressed','true'); themeKnob.innerHTML = '<span class=\"ico\">☀️</span>'; }
+      else { document.documentElement.removeAttribute('data-theme'); themeToggle.setAttribute('data-theme','light'); themeToggle.setAttribute('aria-pressed','false'); themeKnob.innerHTML = '<span class=\"ico\">🌙</span>'; }
+    }
+    themeToggle.addEventListener('click', ()=>{
+      const current = loadTheme();
+      const next = current === 'dark' ? 'light' : 'dark';
+      
+      
+      
+      // spin animation inside knob
+      themeKnob.classList.add('spin');
+      setTimeout(()=> themeKnob.classList.remove('spin'), 420);
+      try{ localStorage.setItem('theme', next); }catch(e){}
+      applyTheme(next);
+    });
+    // default: daytime
+    applyTheme(loadTheme());
+
+
+
+
+    // ---------- On start ----------
+    document.addEventListener('DOMContentLoaded', ()=>{
+      renderFavorites();
+      showPage(loadLastPage());
+      populateConvUnits();
+      loadDates();
+      updateCounts();
+    });
+
+
+
+    // ---------- Share helper ----------
+    async function tryShare(title, text){
+      const payload = {title, text};
+      try{
+        if(navigator.share){
+          await navigator.share(payload);
+          return true;
+        } else {
+          await navigator.clipboard.writeText(title + '\n\n' + text);
+          alert('تم نسخ النتيجة إلى الحافظة');
+          return false;
+        }
+      }catch(e){
+        alert('المشاركة غير مدعومة هنا');
+        return false;
+      }
+    }
+
+
+
+
+    // ---------- AGE ----------
+    function calculateAge(){
+      const b = document.getElementById('birthDate').value;
+      if(!b) return alert('اختر تاريخ الميلاد');
+      const bd = new Date(b);
+      const now = new Date();
+      let yrs = now.getFullYear() - bd.getFullYear();
+      let m = now.getMonth() - bd.getMonth();
+      let d = now.getDate() - bd.getDate();
+      if(d < 0){ m--; d += new Date(now.getFullYear(), now.getMonth(), 0).getDate(); }
+      if(m < 0){ yrs--; m += 12; }
+      const lines = [];
+      lines.push(`سنوات: ${yrs}`);
+      lines.push(`شهور: ${m}`);
+      lines.push(`أيام: ${d}`);
+      const el = document.getElementById('ageResult');
+      el.innerHTML = lines.map(l=>`<div>${l}</div>`).join('');
+      el.style.display = 'block';
+    }
+    document.getElementById('shareAge').addEventListener('click', ()=>{ const el = document.getElementById('ageResult'); if(el.style.display==='none') return alert('لا توجد نتيجة للمشاركة'); tryShare('نتيجة: حاسبة العمر', el.innerText); });
+
+
+
+
+    // ---------- DIFF ----------
+    document.getElementById('calcDiffBtn').addEventListener('click', ()=>{
+      const f = document.getElementById('fromDate').value;
+      const t = document.getElementById('toDate').value;
+      if(!f || !t) return alert('اختر التاريخين');
+      const fd = new Date(f), td = new Date(t);
+      let d1 = fd, d2 = td; if(d1 > d2){ const tmp=d1; d1=d2; d2=tmp; }
+      const totalMs = d2 - d1; const totalDays = Math.floor(totalMs / (1000*60*60*24)); const weeks = Math.floor(totalDays / 7);
+      let y1 = d1.getFullYear(), m1 = d1.getMonth(), day1 = d1.getDate();
+      let y2 = d2.getFullYear(), m2 = d2.getMonth(), day2 = d2.getDate();
+      let years = y2 - y1; let months = m2 - m1; let days = day2 - day1;
+      if(days < 0){ months--; const prevMonth = new Date(y2, m2, 0).getDate(); days += prevMonth; }
+      if(months < 0){ years--; months += 12; }
+      const lines = [];
+      lines.push(`الفرق الكامل: ${years} سنة، ${months} شهر، ${days} يوم`);
+      lines.push(`أيام كليّة: ${totalDays} يوم`);
+      lines.push(`أسابيع تقريبية: ${weeks} أسبوع`);
+      const el = document.getElementById('diffResult'); el.innerHTML = lines.map(l=>`<div>${l}</div>`).join(''); el.style.display='block';
+    });
+    document.getElementById('shareDiff').addEventListener('click', ()=>{ const el = document.getElementById('diffResult'); if(el.style.display==='none') return alert('لا توجد نتيجة للمشاركة'); tryShare('نتيجة: الفرق بين تاريخين', el.innerText); });
+
+
+
+
+    // ---------- BMI ----------
+    document.getElementById('calcBmiBtn').addEventListener('click', ()=>{
+      const w = parseFloat(document.getElementById('weight').value); const h = parseFloat(document.getElementById('height').value);
+      if(isNaN(w) || isNaN(h) || h <= 0) return alert('أدخل الوزن والطول بشكل صحيح');
+      const m = h/100; const bmi = (w/(m*m)); const bmiFixed = bmi.toFixed(1);
+      let cat = ''; if(bmi < 18.5) cat = 'نقص وزن'; else if(bmi < 25) cat = 'وزن صحي'; else if(bmi < 30) cat = 'زيادة وزن'; else cat = 'سمنة';
+      const minIdeal = (18.5 * m * m); const maxIdeal = (24.9 * m * m);
+      const lines = []; 
+     // lines.push(`مؤشر كتلة الجسم (BMI): ${bmiFixed}`); 
+      lines.push(`التصنيف: ${cat}`); lines.push(`الوزن المثالي التقريبي: بين ${minIdeal.toFixed(1)} كغ و ${maxIdeal.toFixed(1)} كغ`);
+      const el = document.getElementById('bmiResult'); el.innerHTML = lines.map(l=>`<div>${l}</div>`).join(''); el.style.display = 'block';
+    });
+    document.getElementById('shareBmi').addEventListener('click', ()=>{ const el = document.getElementById('bmiResult'); if(el.style.display==='none') return alert('لا توجد نتيجة للمشاركة'); tryShare('نتيجة: الوزن المثالي', el.innerText); });
+
+
+
+
+
+
+    // ---------- Discount ----------
+    document.getElementById('calcDiscBtn').addEventListener('click', ()=>{
+      const p = parseFloat(document.getElementById('origPrice').value); const r = parseFloat(document.getElementById('discRate').value);
+      if(isNaN(p)) return alert('أدخل السعر'); const newp = (p*(1 - r/100)); const saved = (p - newp);
+      const lines = []; lines.push(`السعر الأصلي: ${p.toFixed(2)}`); lines.push(`نسبة الخصم: ${r}%`); lines.push(`المبلغ المقتطع: ${saved.toFixed(2)}`); lines.push(`السعر بعد الخصم: ${newp.toFixed(2)}`);
+      const el = document.getElementById('discResult'); el.innerHTML = lines.map(l=>`<div>${l}</div>`).join(''); el.style.display = 'block';
+    });
+    document.getElementById('shareDisc').addEventListener('click', ()=>{ const el = document.getElementById('discResult'); if(el.style.display==='none') return alert('لا توجد نتيجة للمشاركة'); tryShare('نتيجة: حاسبة الخصم', el.innerText); });
+
+
+
+
+
+
+
+    // ---------- Percent ----------
+    function updatePercentInputs(){ const mode = document.getElementById('percentMode').value; const labelA = document.getElementById('labelA'); const labelB = document.getElementById('labelB'); if(mode === 'percent'){ labelA.textContent = 'العدد:'; labelB.textContent = 'النسبة (%):'; } else { labelA.textContent = 'السعر/العدد الأصلي:'; labelB.textContent = 'نسبة الخصم (%):'; } document.getElementById('percentResult').style.display = 'none'; }
+    document.getElementById('percentMode').addEventListener('change', updatePercentInputs);
+    document.getElementById('calcPercentBtn').addEventListener('click', ()=>{
+      const mode = document.getElementById('percentMode').value; const n = parseFloat(document.getElementById('percentNum').value); const r = parseFloat(document.getElementById('percentRate').value);
+      if(isNaN(n) || isNaN(r)) return alert('أدخل القيم الصحيحة');
+      const el = document.getElementById('percentResult'); const lines = [];
+      if(mode === 'percent'){ const val = (n * r / 100); lines.push(`${r}% من ${n} = ${val.toFixed(2)}`); }
+      else { const discountAmount = (n * r / 100); const after = (n - discountAmount); lines.push(`السعر الأصلي: ${n.toFixed(2)}`); lines.push(`نسبة الخصم: ${r}%`); lines.push(`المبلغ المقتطع: ${discountAmount.toFixed(2)}`); lines.push(`السعر بعد الخصم: ${after.toFixed(2)}`); }
+      el.innerHTML = lines.map(l=>`<div>${l}</div>`).join(''); el.style.display = 'block';
+    });
+    document.getElementById('sharePercent').addEventListener('click', ()=>{ const el = document.getElementById('percentResult'); if(el.style.display==='none') return alert('لا توجد نتيجة للمشاركة'); tryShare('نتيجة: النسبة المئوية', el.innerText); });
+
+
+
+
+
+
+    // ---------- Dates ----------
+    function toHijri(g){
+      const dd = g.getDate(); const mm = g.getMonth()+1; const yy = g.getFullYear();
+      let m = mm, y = yy; if (m < 3) { y -= 1; m += 12; }
+      const a = Math.floor(y/100); const b = 2 - a + Math.floor(a/4);
+      const jd = Math.floor(365.25*(y+4716)) + Math.floor(30.6001*(m+1)) + dd + b - 1524.5;
+      const islamicEpoch = 1948439.5; const days = Math.floor(jd - islamicEpoch);
+      const hYear = Math.floor((30*days + 10646) / 10631);
+      const startMonth = Math.ceil((days - 29 - hijriToDays(hYear,1)) / 29.5) + 1;
+      const hijriMonth = Math.min(12, Math.max(1, startMonth));
+      const daysUpToMonth = hijriToDays(hYear,hijriMonth);
+      const hijriDay = days - daysUpToMonth + 1;
+      return {y:hYear,m:hijriMonth,d:hijriDay};
+      function hijriToDays(y,m){ return Math.floor((y-1)*354 + Math.floor((3 + (11*y)) / 30) + (m-1)*29.5); }
+    }
+    function loadDates(){ const now = new Date(); const gDate = now.toLocaleDateString('ar-EG',{weekday:'long',year:'numeric',month:'long',day:'numeric'}); document.getElementById('gDate').textContent = gDate;
+      try{ const hij = new Intl.DateTimeFormat('ar-SA-u-ca-islamic', {day:'numeric',month:'long',year:'numeric'}).format(now); document.getElementById('hDate').textContent = hij; }catch(e){ const h = toHijri(now); document.getElementById('hDate').textContent = `${h.d} / ${h.m} / ${h.y} هـ (تقريبي)`; }
+    }
+
+
+
+
+
+
+    // ---------- Convert Units (clean layout) ----------
+    const units = { length: ['m','cm','km','inch'], weight: ['kg','g','lb'], temp: ['C','F'] };
+    
+    
+    function populateConvUnits(){ 
+  const type = document.getElementById('convType').value; 
+  updateConvOptions(type); 
+}
+
+// ✅ عندما يغيّر المستخدم نوع التحويل، يتم عرض وحدات ذلك النوع فقط
+document.getElementById('convType').addEventListener('change', function(){
+  updateConvOptions(this.value);
+});
+    
+    
+    
+    function updateConvOptions(type){
+      const from = document.getElementById('convFrom'); const to = document.getElementById('convTo'); from.innerHTML = ''; to.innerHTML = '';
+      units[type].forEach(u=>{ from.appendChild(new Option(u,u)); to.appendChild(new Option(u,u)); });
+    }
+    
+    
+    
+    
+document.getElementById('doConvert').addEventListener('click', function () {
+  // قراءة القيم من الواجهة
+  var type = document.getElementById('convType').value;
+  var raw = document.getElementById('convValue').value;
+  var v = parseFloat(raw);
+  var from = document.getElementById('convFrom').value;
+  var to = document.getElementById('convTo').value;
+
+  // تحقق من الإدخال
+  if (raw.trim() === '' || isNaN(v)) {
+    alert('أدخل قيمة صحيحة');
+    return;
+  }
+
+  // حساب النتيجة
+  var res = convertValue(v, from, to, type);
+
+  // تنسيق القيمة النهائية
+  var formatted = (type === 'temp') ? res.toFixed(2) :
+                  (typeof roundSmart === 'function' ? roundSmart(res) :
+                   Math.round((res + Number.EPSILON) * 100000) / 100000);
+
+  // بناء النص: الوحدة إلى يمين الرقم (مثال: 100cm = 1m)
+  var leftText = '' + v + from;         // 100cm
+  var rightText = '' + formatted + to;  // 1m
+
+  // ضع الناتج في العنصر
+  var el = document.getElementById('convResult');
+  if (!el) {
+    console.error('العنصر #convResult غير موجود');
+    return;
+  }
+
+  el.innerHTML = '<div class="unit-row">' +
+                   '<div class="unit-val">' + leftText + '</div>' +
+                   '<div class="unit-equal">=</div>' +
+                   '<div class="unit-val">' + rightText + '</div>' +
+                 '</div>';
+  el.style.display = 'block';
+
+  // تصحيح سريع في الـ Console لمساعدتنا إذا لم يعمل
+  console.log('convert debug:', { inputValue: raw, v: v, from: from, to: to, res: res, formatted: formatted, leftText: leftText, rightText: rightText });
+});
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    function convertValue(val, from, to, type){
+      if(type === 'length'){ const toMeters = { m:1, cm:0.01, km:1000, inch:0.0254 }; return val * toMeters[from] / toMeters[to]; }
+      else if(type === 'weight'){ const toKg = { kg:1, g:0.001, lb:0.45359237 }; return val * toKg[from] / toKg[to]; }
+      else if(type === 'temp'){ if(from === to) return val; if(from==='C' && to==='F') return (val*9/5)+32; if(from==='F' && to==='C') return (val-32)*5/9; }
+      return val;
+    }
+    function roundSmart(n){ return Math.round((n + Number.EPSILON) * 100000)/100000; }
+    document.getElementById('shareConvert').addEventListener('click', ()=>{ const el = document.getElementById('convResult'); if(el.style.display==='none') return alert('لا توجد نتيجة للمشاركة'); tryShare('نتيجة: تحويل الوحدات', el.innerText); });
+
+
+
+
+
+
+
+    // ---------- Text counter (words & chars only) ----------
+    const textInput = document.getElementById('textInput');
+    function updateCounts(){ if(!textInput) return; const t = textInput.value || ''; const words = t.trim() ? t.trim().split(/\s+/).length : 0; const chars = t.replace(/\r\n/g,'\n').length; document.getElementById('counts').textContent = `كلمات: ${words} — حروف: ${chars}`; }
+    textInput && textInput.addEventListener('input', ()=>{ updateCounts(); });
+    document.getElementById('shareText').addEventListener('click', ()=>{ const t = textInput.value || ''; if(!t) return alert('لا يوجد نص للمشاركة'); tryShare('نص من عدّاد الكلمات', t); });
+    document.getElementById('saveText').addEventListener('click', ()=>{ const t = textInput.value || ''; if(!t) return alert('لا يوجد نص للحفظ'); try{ const saved = JSON.parse(localStorage.getItem('savedTexts')||'[]'); saved.unshift({text:t, ts: Date.now()}); localStorage.setItem('savedTexts', JSON.stringify(saved.slice(0,50))); alert('تم حفظ النص محليًا'); }catch(e){ alert('خطأ في الحفظ'); } });
+
+
+
+
+
+
+    // ---------- Calculator (digit-by-digit backspace + clear all) ----------
+    let calcExpr = '';
+    
+    
+    
+    
+    function press(ch){ calcExpr += ch; updateCalcDisplay(); pulseButtonEffect(event); }
+    
+    
+    
+    
+    function updateCalcDisplay(){ document.getElementById('calcDisplay').value = calcExpr; }
+    function backspaceCalc(){ calcExpr = calcExpr.slice(0,-1); updateCalcDisplay(); }
+    function clearAllCalc(){ calcExpr = ''; updateCalcDisplay(); }
+    function calculate(){ try{ if(!/^[0-9+\-*/().\s]+$/.test(calcExpr)) throw new Error('invalid'); const res = Function('"use strict";return ('+calcExpr+')')(); document.getElementById('calcDisplay').value = res; calcExpr = ''+res; }catch(e){ document.getElementById('calcDisplay').value = 'خطأ'; } }
+    document.getElementById('shareCalc').addEventListener('click', ()=>{ const v = document.getElementById('calcDisplay').value; if(!v) return alert('لا توجد نتيجة للمشاركة'); tryShare('نتيجة: الآلة الحاسبة', v); });
+
+
+
+
+
+
+
+    // keyboard support (calc) - basic
+    window.addEventListener('keydown', (e)=>{
+      const visible = document.getElementById('calc').style.display !== 'none';
+      if(!visible) return;
+      if(/^[0-9+\-*/().]$/.test(e.key)){ calcExpr += e.key; updateCalcDisplay(); e.preventDefault(); }
+      if(e.key === 'Enter'){ calculate(); e.preventDefault(); }
+      if(e.key === 'Backspace'){ backspaceCalc(); e.preventDefault(); }
+    });
+
+
+
+
+
+
+
+    // ---------- Timer ----------
+    let timerInterval = null; let remaining = 0;
+    function formatTime(s){ const mm = Math.floor(s/60).toString().padStart(2,'0'); const ss = (s%60).toString().padStart(2,'0'); return `${mm}:${ss}`; }
+    document.getElementById('startTimer').addEventListener('click', ()=>{
+      const val = parseInt(document.getElementById('timerInput').value) || 0; if(val <= 0) return alert('أدخل عدد ثواني صحيح');
+      remaining = val; updateTimerDisplay();
+      if(timerInterval) clearInterval(timerInterval);
+      timerInterval = setInterval(()=>{ remaining--; updateTimerDisplay(); if(remaining <= 0){ clearInterval(timerInterval); timerInterval = null; alert('انتهى الوقت'); } },1000);
+    });
+    document.getElementById('stopTimer').addEventListener('click', ()=>{ if(timerInterval){ clearInterval(timerInterval); timerInterval=null; } });
+    document.getElementById('resetTimer').addEventListener('click', ()=>{ if(timerInterval){ clearInterval(timerInterval); timerInterval=null; } remaining = 0; updateTimerDisplay(); });
+    function updateTimerDisplay(){ document.getElementById('timerDisplay').textContent = remaining>0 ? formatTime(remaining) : '00:00'; }
+    document.getElementById('shareTimer').addEventListener('click', ()=>{ const v = document.getElementById('timerDisplay').textContent; tryShare('مؤقت/ستوب ووتش', v); });
+
+
+
+
+
+
+
+    // ---------- Utilities ----------
+    function restoreDefaults(){
+      if(confirm('هل تريد إعادة ضبط المفضلات؟')){ localStorage.removeItem('favorites'); localStorage.removeItem('savedTexts'); localStorage.removeItem('lastPage'); renderFavorites(); alert('تمت إعادة ضبط المفضلات'); showPage('home'); }
+    }
+
+
+
+
+
+
+
+    // ---------- small helpers ----------
+    function pulseButtonEffect(e){
+      try{
+        const btn = (e && e.currentTarget) || (e && e.target) || document.activeElement;
+        if(!btn) return;
+        let p = btn.querySelector('.pulse');
+        if(!p){ p = document.createElement('span'); p.className='pulse'; btn.appendChild(p); }
+        p.classList.remove('show'); void p.offsetWidth; p.classList.add('show');
+        setTimeout(()=> p.classList.remove('show'),420);
+      }catch(err){}
+    }
+    
+    
+    
+    
+    // attach pulse to many interactive buttons
+    document.querySelectorAll('.btn, .small-btn, .back-btn, .theme-toggle').forEach(b=>{
+      b.addEventListener('click',(e)=>{ pulseButtonEffect(e); });
+    });
+
+
+
+
+
+    // Keep last page after reload
+    window.addEventListener('load', ()=>{ showPage(loadLastPage()); });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </script>
+</body>
+</html>
