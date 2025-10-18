@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://adawatii.vercel.app/sitemap.xml

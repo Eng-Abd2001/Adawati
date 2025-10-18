@@ -512,6 +512,86 @@ button[id^="share"],
 
 
 
+
+
+
+
+/* 💎 تنسيق جمالي لفقرات الشرح والمحتوى النصي */
+.info-text {
+  background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.8));
+  border-radius: 14px;
+  padding: 18px 20px;
+  margin-top: 20px;
+  box-shadow: var(--card-shadow);
+  border: 1px solid rgba(0,0,0,0.04);
+  line-height: 1.9;
+  text-align: right;
+  color: var(--text);
+  animation: fadeIn 0.6s ease;
+}
+[data-theme="dark"] .info-text {
+  background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.03));
+  border-color: rgba(255,255,255,0.05);
+  box-shadow: 0 8px 22px rgba(0,0,0,0.4);
+}
+
+.info-text h2 {
+  color: var(--accent);
+  font-size: 19px;
+  margin-bottom: 10px;
+  font-weight: 700;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.08);
+}
+
+.info-text p {
+  font-size: 15px;
+  margin-bottom: 8px;
+  color: var(--text);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 💠 تنسيق قسم "عن الموقع" */
+#about {
+  background: linear-gradient(180deg, rgba(240,248,255,0.8), rgba(255,255,255,0.9));
+  border-radius: 16px;
+  padding: 24px 22px;
+  box-shadow: var(--card-shadow);
+  border: 1px solid rgba(0,0,0,0.05);
+  margin-top: 40px;
+  line-height: 1.9;
+}
+[data-theme="dark"] #about {
+  background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(0,0,0,0.04));
+  border-color: rgba(255,255,255,0.06);
+}
+
+#about h2 {
+  color: var(--accent);
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+#about p {
+  color: var(--text);
+  font-size: 15px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
   </style>
   
   
@@ -646,8 +726,24 @@ button[id^="share"],
 
 
 
+
+
+
+
+
+
+
+
+
       <div class="grid" id="cardsGrid">
         <div class="card" data-tool="age"><div class="icon">🧮</div><div class="meta"><h3>حاسبة العمر</h3><p>احسب عمرك بالأيام، الأشهر، والسنوات</p></div><div class="fav" data-tool="age" title="أضف للمفضلة">☆</div></div>
+
+
+
+
+
+
+
 
 
 
@@ -655,7 +751,21 @@ button[id^="share"],
 
 
 
+
+
+
+
+
+
+
         <div class="card" data-tool="bmi"><div class="icon">⚖️</div><div class="meta"><h3>الوزن المثالي</h3><p>حساب مؤشر كتلة الجسم والوزن المثالي بسهولة</p></div><div class="fav" data-tool="bmi" title="أضف للمفضلة">☆</div></div>
+
+
+
+
+
+
+
 
 
 
@@ -663,7 +773,20 @@ button[id^="share"],
 
 
 
+
+
+
+
+
+
         <div class="card" data-tool="percent"><div class="icon">📈</div><div class="meta"><h3>النسبة المئوية</h3><p>احسب نسبة أو خصم من رقم</p></div><div class="fav" data-tool="percent" title="أضف للمفضلة">☆</div></div>
+
+
+
+
+
+
+
 
 
 
@@ -671,25 +794,93 @@ button[id^="share"],
 
 
 
+
+
+
+
+
+
+
         <div class="card" data-tool="convert"><div class="icon">🔁</div><div class="meta"><h3>تحويل الوحدات</h3><p>طول، وزن، درجة حرارة</p></div><div class="fav" data-tool="convert" title="أضف للمفضلة">☆</div></div>
+
+
+
+
+
+
+
 
 
         <div class="card" data-tool="counter"><div class="icon">✍️</div><div class="meta"><h3>عداد الكلمات والحروف</h3><p>عدّاد فوري للنصوص</p></div><div class="fav" data-tool="counter" title="أضف للمفضلة">☆</div></div>
 
 
+
+
+
+
+
+
+
+
         <div class="card" data-tool="calc"><div class="icon">🧮</div><div class="meta"><h3>آلة حاسبة</h3><p>العمليات الأساسية: + − × ÷</p></div><div class="fav" data-tool="calc" title="أضف للمفضلة">☆</div></div>
+
+
+
+
+
+
+
 
 
         <div class="card" data-tool="timer"><div class="icon">⏱️</div><div class="meta"><h3>مؤقت / ستوب ووتش</h3><p>ابدأ، أوقف، إعادة</p></div><div class="fav" data-tool="timer" title="أضف للمفضلة">☆</div></div>
       </div>
 
 
+
+
+
+
+
+
+
       <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:center">
         <button class="btn" onclick="restoreDefaults()">إعادة ضبط المفضلات</button>
       </div>
+      
+      
+      
+      
+      
+      
+      
+      <section id="about" style="margin-top:30px; text-align:right;">
+  <h2>عن موقع أدواتي اليومية</h2>
+  <p>
+    موقع <strong>أدواتي اليومية</strong> هو مشروع عربي مجاني يهدف إلى توفير أدوات حسابية وخدمية مبسطة للمستخدم العربي.
+    صُمم ليكون مرجعًا سريعًا لكل ما يحتاجه المستخدم من حسابات يومية مثل العمر، النسبة المئوية، الخصم، تحويل الوحدات، وغيرها.
+  </p>
+  <p>
+    نؤمن بأن البساطة والدقة أساس أي تجربة ناجحة، لذا حرصنا على أن تكون الأدوات خفيفة وسريعة وآمنة،
+    دون جمع أي بيانات شخصية أو الحاجة إلى تسجيل حساب.
+  </p>
+</section>
+      
+      
+      
+      
+      
+      
+      
+      
     </section>
 
     <!-- Tools -->
+
+
+
+
+
+
 
 
 
@@ -706,7 +897,36 @@ button[id^="share"],
         </div>
         <div class="result" id="ageResult" style="display:none"></div>
       </div>
+      
+      
+      
+      
+      
+      
+      <div class="info-text">
+  <h2>ما هي حاسبة العمر؟</h2>
+  <p>
+    تتيح لك حاسبة العمر معرفة عمرك الحقيقي بدقة من خلال إدخال تاريخ ميلادك فقط.
+    تُحسب السنوات والأشهر والأيام تلقائيًا، مما يساعدك في معرفة الوقت الذي مضى منذ ولادتك بسهولة.
+    تستخدم الأداة تقويم الميلاد القياسي وتُظهر النتيجة في ثوانٍ دون أي تعقيد.
+  </p>
+  <p>
+    تفيد هذه الأداة في تحديد الأعمار المطلوبة في المعاملات الرسمية أو مسابقات التسجيل أو عند مقارنة أعمار الأشخاص.
+    تم تصميم الحاسبة لتكون دقيقة وسريعة وسهلة الاستخدام على جميع الأجهزة.
+  </p>
+</div>
+      
+      
+      
+      
     </section>
+
+
+
+
+
+
+
 
 
 
@@ -726,7 +946,34 @@ button[id^="share"],
         </div>
         <div class="result" id="diffResult" style="display:none"></div>
       </div>
+      
+      
+      
+      
+      
+      <div class="info-text">
+  <h2>الفرق بين تاريخين</h2>
+  <p>
+    تساعدك هذه الأداة على معرفة عدد الأيام أو الأسابيع أو الأشهر أو السنوات بين تاريخين محددين.
+    يمكنك استخدامها لمعرفة المدة بين حدثين مثل تاريخ الميلاد واليوم الحالي أو بداية مشروع ونهايته.
+  </p>
+  <p>
+    تقوم الأداة بالحساب بشكل فوري دون الحاجة إلى اتصال بالإنترنت أو برامج إضافية،
+    وهي مناسبة للطلاب والموظفين وأي شخص يحتاج إلى معرفة الفترات الزمنية بسهولة.
+  </p>
+</div>
+      
+      
+      
+      
+      
     </section>
+
+
+
+
+
+
 
 
 
@@ -746,7 +993,36 @@ button[id^="share"],
         </div>
         <div class="result" id="bmiResult" style="display:none"></div>
       </div>
+      
+      
+      
+      
+      
+      <div class="info-text">
+  <h2>حاسبة الوزن المثالي</h2>
+  <p>
+    تعتمد هذه الأداة على حساب مؤشر كتلة الجسم (BMI) لتحديد ما إذا كان وزنك مناسبًا لطولك.
+    بمجرد إدخال الطول والوزن، ستحصل على تصنيف دقيق لحالتك: وزن مثالي، زيادة وزن، أو سمنة.
+  </p>
+  <p>
+    تهدف الأداة إلى التوعية الصحية وليس لتقديم استشارة طبية، وهي مفيدة لمن يرغب في الحفاظ على وزن صحي ومثالي.
+  </p>
+</div>
+      
+      
+      
+      
+      
+      
     </section>
+
+
+
+
+
+
+
+
 
 
 
@@ -766,7 +1042,29 @@ button[id^="share"],
         </div>
         <div class="result" id="discResult" style="display:none"></div>
       </div>
+      
+      
+      
+      <div class="info-text">
+  <h2>حاسبة الخصم</h2>
+  <p>
+    تساعدك حاسبة الخصم على معرفة السعر النهائي بعد تطبيق نسبة الخصم على أي منتج.
+    فقط أدخل السعر الأصلي ونسبة الخصم لتتعرف على المبلغ المخصوم والسعر الجديد.
+  </p>
+  <p>
+    هذه الأداة مفيدة أثناء التسوق سواء عبر الإنترنت أو في المتاجر لمعرفة مدى الاستفادة الحقيقية من العروض.
+  </p>
+</div>
+      
+      
+      
+      
+      
     </section>
+
+
+
+
 
 
 
@@ -792,7 +1090,34 @@ button[id^="share"],
         </div>
         <div class="result" id="percentResult" style="display:none"></div>
       </div>
+      
+      
+      
+      
+      
+      <div class="info-text">
+  <h2>أداة النسبة المئوية</h2>
+  <p>
+    تتيح لك هذه الأداة حساب النسب بسهولة، مثل معرفة 20% من رقم معين أو حساب السعر بعد خصم محدد.
+    يمكنك استخدامها في الحسابات المالية، الدراسية، أو في حياتك اليومية لتبسيط العمليات الحسابية.
+  </p>
+  <p>
+    صممت الأداة لتكون دقيقة وبسيطة وتُظهر النتائج بشكل فوري وواضح.
+  </p>
+</div>
+      
+      
+      
+      
+      
     </section>
+
+
+
+
+
+
+
 
 
 
@@ -805,7 +1130,29 @@ button[id^="share"],
         <div class="g-date" id="gDate">--</div>
         <div class="h-date" id="hDate">--</div>
       </div>
+      
+      
+      
+      <div class="info-text">
+  <h2>التاريخ الهجري والميلادي اليوم</h2>
+  <p>
+    تعرض هذه الأداة التاريخ الحالي بالتقويمين الهجري والميلادي في آنٍ واحد.
+    يتم تحديث التاريخ تلقائيًا يوميًا، مما يجعلها مفيدة لمعرفة مواعيد المناسبات الدينية أو الرسمية.
+  </p>
+  <p>
+    تعتمد الأداة على نظام تقويم دقيق وتعرض النتائج باللغة العربية لتناسب المستخدم العربي بشكل كامل.
+  </p>
+</div>
+      
+      
+      
+      
     </section>
+
+
+
+
+
 
 
 
@@ -835,7 +1182,31 @@ button[id^="share"],
 
         <div class="result" id="convResult" style="display:none"></div>
       </div>
+      
+      
+      
+      
+      <div class="info-text">
+  <h2>تحويل الوحدات</h2>
+  <p>
+    يمكنك من خلال هذه الأداة تحويل القيم بين أنظمة القياس المختلفة مثل الطول (متر، كيلومتر، إنش)
+    والوزن (كغ، غرام، باوند) ودرجة الحرارة (مئوية، فهرنهايت).
+  </p>
+  <p>
+    مفيدة للطلاب والمهندسين والمستخدمين الذين يحتاجون إلى تحويلات دقيقة وسريعة دون برامج إضافية.
+  </p>
+</div>
+      
+      
+      
+      
     </section>
+
+
+
+
+
+
 
 
 
@@ -852,7 +1223,31 @@ button[id^="share"],
           <button class="small-btn" id="saveText">حفظ</button>
         </div>
       </div>
+      
+      
+      
+      
+      <div class="info-text">
+  <h2>عداد الكلمات والحروف</h2>
+  <p>
+    أداة مفيدة للكتّاب والطلاب تتيح لك معرفة عدد الكلمات والحروف في النص بسرعة.
+    فقط قم بكتابة أو لصق النص في المربع، وستظهر النتائج فورًا دون الحاجة إلى الضغط على أي زر.
+  </p>
+  <p>
+    مفيدة لكتابة المقالات أو الرسائل أو المنشورات التي تتطلب عددًا محددًا من الكلمات.
+  </p>
+</div>
+      
+      
+      
+      
     </section>
+
+
+
+
+
+
 
 
 
@@ -862,6 +1257,7 @@ button[id^="share"],
       <div class="page-title"><span>آلة حاسبة بسيطة</span></div>
       <div class="back-wrap"><button class="back-btn" onclick="showPage('home')">🔙</button></div>
       <div class="tool">
+      
       
       
       
@@ -910,7 +1306,29 @@ button[id^="share"],
   <button class="small-btn" id="shareCalc">مشاركة</button>
 </div>
 
+
+
+<div class="info-text">
+  <h2>آلة حاسبة بسيطة</h2>
+  <p>
+    أداة سريعة لإجراء العمليات الحسابية الأساسية مثل الجمع والطرح والضرب والقسمة.
+    تم تصميمها لتكون خفيفة وسهلة الاستخدام على جميع الأجهزة.
+  </p>
+  <p>
+    يمكنك الاعتماد عليها لإجراء حساباتك اليومية دون الحاجة إلى تطبيقات خارجية أو اتصال بالإنترنت.
+  </p>
+</div>
+
+
+
+
      </section>
+
+
+
+
+
+
 
 
 
@@ -935,7 +1353,29 @@ button[id^="share"],
           </div>
         </div>
       </div>
+      
+      
+      
+      
+      <div class="info-text">
+  <h2>المؤقت (الستوب ووتش)</h2>
+  <p>
+    يمكنك من خلال هذه الأداة ضبط مؤقت زمني للعد التنازلي أو حساب مدة زمنية محددة.
+    مفيدة عند الطهي، الدراسة، أو متابعة أوقات التمرين.
+  </p>
+  <p>
+    الأداة بسيطة وتعمل في المتصفح مباشرة، مع إمكانية إيقاف وإعادة المؤقت بسهولة.
+  </p>
+</div>
+      
+      
+      
     </section>
+
+
+
+
+
 
     <footer>تم التصميم بواسطة [ Eng_Abd ]</footer>
   </main>
